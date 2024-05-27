@@ -12,7 +12,7 @@ func Router() {
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello Worouterld",
+			"message": "Hello World!",
 		})
 	})
 	router.GET("/pokedex", controllers.GetPokedex)
