@@ -68,8 +68,8 @@ func GetPokemon(c *gin.Context) {
 	}
 }
 
-func FindLowestSpeed(pokemon1 models.Pokemon, pokemon2 models.Pokemon) models.Pokemon {
-	if pokemon1.Base.Speed < pokemon2.Base.Speed {
+func FindHighestSpeed(pokemon1 models.Pokemon, pokemon2 models.Pokemon) models.Pokemon {
+	if pokemon1.Base.Speed > pokemon2.Base.Speed {
 		return pokemon1
 	}
 
@@ -77,14 +77,14 @@ func FindLowestSpeed(pokemon1 models.Pokemon, pokemon2 models.Pokemon) models.Po
 }
 
 func CreateBattle(c *gin.Context) {
-	id1, err := strconv.Atoi(c.Param("id1"))
+	id1, err := strconv.Atoi(c.Param("pokemon1"))
 
 	if err != nil {
 		c.JSON(400, gin.H{"error": INVALID_ID})
 		return
 	}
 
-	id2, err := strconv.Atoi(c.Param("id2"))
+	id2, err := strconv.Atoi(c.Param("pokemon2"))
 
 	if err != nil {
 		c.JSON(400, gin.H{"error": INVALID_ID})
@@ -94,10 +94,8 @@ func CreateBattle(c *gin.Context) {
 	pokemon1 := FindPokemonById(id1)
 	pokemon2 := FindPokemonById(id2)
 
-	winner := FindLowestSpeed(pokemon1, pokemon2)
+	winner := FindHighestSpeed(pokemon1, pokemon2)
 
 	// c.JSON(200, gin.H{"pokemon battle": []models.Pokemon{pokemon1, pokemon2}})
 	c.JSON(200, gin.H{"winner": winner})
 }
-
-

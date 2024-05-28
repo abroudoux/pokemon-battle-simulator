@@ -35,4 +35,3 @@ type Pokemon struct {
     Type []Type `json:"type"`
     Base Base   `json:"base"`
 }
-
