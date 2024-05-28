@@ -8,16 +8,15 @@ import (
 )
 
 func Router() {
-	router := gin.Default()
+    router := gin.Default()
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello World!",
-		})
-	})
-	router.GET("/pokedex", controllers.GetPokedex)
-	router.GET("/pokemon/:id", controllers.GetPokemon)
+    router.GET("/", func(c *gin.Context) {
+        c.JSON(http.StatusOK, gin.H{
+            "message": "Hello World!",
+        })
+    })
+    router.GET("/pokedex", controllers.GetPokedex)
+    router.GET("/pokedex/:id", controllers.GetPokemon)
 
-	router.Run(":8080")
+    router.Run(":8080")
 }
-

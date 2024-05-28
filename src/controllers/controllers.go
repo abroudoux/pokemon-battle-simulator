@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/abroudoux/pokemon-battle-simulator/src/models"
@@ -10,72 +13,45 @@ import (
 var Pokedex []models.Pokemon
 
 func InitPokedex() {
-	pokemon1 := models.Pokemon{
-		Id: 1,
-		Name: {
-			English: "Bulbasaur",
-			Japanese: "フシギダネ",
-			Chinese: "妙蛙种子",
-			French: "Bulbizarre",
-		},
-		Type: {"Grass", "Poison"},
-		Base: {
-			HP: 45,
-			Attack: 49,
-			Defense: 49,
-			SpAttack: 65,
-			SpDefense: 65,
-			Speed: 45,
-		},
-	}
+    file, err := os.Open("data/pokedex.json")
+    if err != nil {
+        fmt.Println(err, "Error opening file")
+        return
+    }
+    defer file.Close()
 
-	Pokedex = append(Pokedex, pokemon1)
+    err = json.NewDecoder(file).Decode(&Pokedex)
+    if err != nil {
+        fmt.Println(err, "Error decoding JSON")
+        return
+    }
+
+    fmt.Println("Pokedex initialized with", len(Pokedex), "pokemons")
 }
 
-// func InitPokedex() {
-// 	file, err := os.Open("data/pokedex.json")
-
-// 	if err != nil {
-// 		fmt.Println(err, "Error opening file")
-// 		return
-// 	}
-
-// 	defer file.Close()
-
-// 	var pokedex []models.Pokemon
-// 	err = json.NewDecoder(file).Decode(&pokedex)
-
-// 	if err != nil {	
-// 		fmt.Println(err)
-// 		return
-// 	}
-
-// 	for _, pokemon := range pokedex {
-// 		fmt.Print("Pokemon: ", pokemon)
-// 	}
-
-// 	Pokedex = pokedex
-// }
-
 func GetPokedex(c *gin.Context) {
-c.JSON(200, gin.H{"pokedex": Pokedex})
+    if len(Pokedex) == 0 {
+        c.JSON(404, gin.H{"error": "No Pokemon in Pokedex"})
+        return
+    }
+
+    c.JSON(200, gin.H{"data": Pokedex})
 }
 
 func GetPokemon(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+    id, err := strconv.Atoi(c.Param("id"))
 
-	if err != nil {
-		c.JSON(400, gin.H{"error": "Invalid ID"})
-		return
-	}
+    if err != nil {
+        c.JSON(400, gin.H{"error": "Invalid ID"})
+        return
+    }
 
-	for _, pokemon := range Pokedex {
-		if pokemon.Id == id {
-			c.JSON(200, gin.H{"data": pokemon})
-			return
-		}
-	}
+    for _, pokemon := range Pokedex {
+        if pokemon.Id == id {
+            c.JSON(200, gin.H{"data": pokemon})
+            return
+        }
+    }
 
-	c.JSON(404, gin.H{"error": "Pokemon not found"})
+    c.JSON(404, gin.H{"error": "Pokemon not found"})
 }
-
