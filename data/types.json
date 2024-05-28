@@ -1,0 +1,378 @@
+[
+  {
+    "id": 1,
+    "name": {
+      "english": "Normal",
+      "japanese": "ノーマル",
+      "chinese": "一般",
+      "french": "Normal"
+    },
+    "weaknesses": {
+      "Fighting": 2
+    },
+    "resistances": {},
+    "immunities": {
+      "Ghost": 0
+    }
+  },
+  {
+    "id": 2,
+    "name": {
+      "english": "Fighting",
+      "japanese": "かくとう",
+      "chinese": "格斗",
+      "french": "Combat"
+    },
+    "weaknesses": {
+      "Flying": 3,
+      "Psychic": 14
+    },
+    "resistances": {
+      "Bug": 7,
+      "Dark": 12,
+      "Rock": 6
+    },
+    "immunities": {}
+  },
+  {
+    "id": 3,
+    "name": {
+      "english": "Flying",
+      "japanese": "ひこう",
+      "chinese": "飞行",
+      "french": "Vol"
+    },
+    "weaknesses": {
+      "Rock": 6,
+      "Electric": 13,
+      "Ice": 15
+    },
+    "resistances": {
+      "Bug": 7,
+      "Grass": 12,
+      "Fighting": 2
+    },
+    "immunities": {
+      "Ground": 5
+    }
+  },
+  {
+    "id": 4,
+    "name": {
+      "english": "Poison",
+      "japanese": "どく",
+      "chinese": "毒",
+      "french": "Poison"
+    },
+    "weaknesses": {
+      "Ground": 5,
+      "Psychic": 14
+    },
+    "resistances": {
+      "Bug": 7,
+      "Fighting": 2,
+      "Grass": 12,
+      "Poison": 4
+    },
+    "immunities": {}
+  },
+  {
+    "id": 5,
+    "name": {
+      "english": "Ground",
+      "japanese": "じめん",
+      "chinese": "地上",
+      "french": "Sol"
+    },
+    "weaknesses": {
+      "Water": 11,
+      "Grass": 12,
+      "Ice": 15
+    },
+    "resistances": {
+      "Poison": 4,
+      "Rock": 6
+    },
+    "immunities": {
+      "Electric": 13
+    }
+  },
+  {
+    "id": 6,
+    "name": {
+      "english": "Rock",
+      "japanese": "いわ",
+      "chinese": "岩石",
+      "french": "Roche"
+    },
+    "weaknesses": {
+      "Fighting": 2,
+      "Ground": 5,
+      "Steel": 9,
+      "Water": 11,
+      "Grass": 12
+    },
+    "resistances": {
+      "Fire": 10,
+      "Flying": 3,
+      "Normal": 1,
+      "Poison": 4
+    },
+    "immunities": {}
+  },
+  {
+    "id": 7,
+    "name": {
+      "english": "Bug",
+      "japanese": "むし",
+      "chinese": "虫",
+      "french": "Insecte"
+    },
+    "weaknesses": {
+      "Fire": 10,
+      "Flying": 3,
+      "Rock": 6
+    },
+    "resistances": {
+      "Grass": 12,
+      "Fighting": 2,
+      "Ground": 5
+    },
+    "immunities": {}
+  },
+  {
+    "id": 8,
+    "name": {
+      "english": "Ghost",
+      "japanese": "ゴースト",
+      "chinese": "幽灵",
+      "french": "Spectre"
+    },
+    "weaknesses": {
+      "Ghost": 8,
+      "Dark": 17
+    },
+    "resistances": {
+      "Bug": 7,
+      "Poison": 4
+    },
+    "immunities": {
+      "Normal": 1,
+      "Fighting": 2
+    }
+  },
+  {
+    "id": 9,
+    "name": {
+      "english": "Steel",
+      "japanese": "はがね",
+      "chinese": "钢",
+      "french": "Acier"
+    },
+    "weaknesses": {
+      "Fire": 10,
+      "Fighting": 2,
+      "Ground": 5
+    },
+    "resistances": {
+      "Bug": 7,
+      "Dragon": 16,
+      "Fairy": 18,
+      "Flying": 3,
+      "Grass": 12,
+      "Ice": 15,
+      "Normal": 1,
+      "Psychic": 14,
+      "Rock": 6,
+      "Steel": 9
+    },
+    "immunities": {
+      "Poison": 4
+    }
+  },
+  {
+    "id": 10,
+    "name": {
+      "english": "Fire",
+      "japanese": "ほのお",
+      "chinese": "炎",
+      "french": "Feu"
+    },
+    "weaknesses": {
+      "Ground": 5,
+      "Rock": 6,
+      "Water": 11
+    },
+    "resistances": {
+      "Bug": 7,
+      "Fairy": 18,
+      "Fire": 10,
+      "Grass": 12,
+      "Ice": 15,
+      "Steel": 9
+    },
+    "immunities": {}
+  },
+  {
+    "id": 11,
+    "name": {
+      "english": "Water",
+      "japanese": "みず",
+      "chinese": "水",
+      "french": "Eau"
+    },
+    "weaknesses": {
+      "Electric": 13,
+      "Grass": 12
+    },
+    "resistances": {
+      "Fire": 10,
+      "Ice": 15,
+      "Steel": 9,
+      "Water": 11
+    },
+    "immunities": {}
+  },
+  {
+    "id": 12,
+    "name": {
+      "english": "Grass",
+      "japanese": "くさ",
+      "chinese": "草",
+      "french": "Plante"
+    },
+    "weaknesses": {
+      "Fire": 10,
+      "Flying": 3,
+      "Ice": 15,
+      "Poison": 4,
+      "Bug": 7
+    },
+    "resistances": {
+      "Electric": 13,
+      "Grass": 12,
+      "Ground": 5,
+      "Water": 11
+    },
+    "immunities": {}
+  },
+  {
+    "id": 13,
+    "name": {
+      "english": "Electric",
+      "japanese": "でんき",
+      "chinese": "电",
+      "french": "Électrique"
+    },
+    "weaknesses": {
+      "Ground": 5
+    },
+    "resistances": {
+      "Electric": 13,
+      "Flying": 3,
+      "Steel": 9
+    },
+    "immunities": {}
+  },
+  {
+    "id": 14,
+    "name": {
+      "english": "Psychic",
+      "japanese": "エスパー",
+      "chinese": "超能",
+      "french": "Psy"
+    },
+    "weaknesses": {
+      "Bug": 7,
+      "Ghost": 8,
+      "Dark": 17
+    },
+    "resistances": {
+      "Fighting": 2,
+      "Psychic": 14
+    },
+    "immunities": {}
+  },
+  {
+    "id": 15,
+    "name": {
+      "english": "Ice",
+      "japanese": "こおり",
+      "chinese": "冰",
+      "french": "Glace"
+    },
+    "weaknesses": {
+      "Fire": 10,
+      "Fighting": 2,
+      "Rock": 6,
+      "Steel": 9
+    },
+    "resistances": {
+      "Ice": 15
+    },
+    "immunities": {}
+  },
+  {
+    "id": 16,
+    "name": {
+      "english": "Dragon",
+      "japanese": "ドラゴン",
+      "chinese": "龙",
+      "french": "Dragon"
+    },
+    "weaknesses": {
+      "Ice": 15,
+      "Dragon": 16,
+      "Fairy": 18
+    },
+    "resistances": {
+      "Electric": 13,
+      "Fire": 10,
+      "Grass": 12,
+      "Water": 11
+    },
+    "immunities": {}
+  },
+  {
+    "id": 17,
+    "name": {
+      "english": "Dark",
+      "japanese": "あく",
+      "chinese": "恶",
+      "french": "Ténèbres"
+    },
+    "weaknesses": {
+      "Bug": 7,
+      "Fighting": 2,
+      "Fairy": 18
+    },
+    "resistances": {
+      "Dark": 17,
+      "Ghost": 8
+    },
+    "immunities": {
+      "Psychic": 14
+    }
+  },
+  {
+    "id": 18,
+    "name": {
+      "english": "Fairy",
+      "japanese": "フェアリー",
+      "chinese": "妖精",
+      "french": "Fée"
+    },
+    "weaknesses": {
+      "Poison": 4,
+      "Steel": 9
+    },
+    "resistances": {
+      "Bug": 7,
+      "Dark": 17,
+      "Fighting": 2
+    },
+    "immunities": {
+      "Dragon": 16
+    }
+  }
+]

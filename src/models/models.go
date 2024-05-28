@@ -7,6 +7,19 @@ type Name struct {
     French   string `json:"french"`
 }
 
+type TypeRelation struct {
+    TypeName string `json:"typeName"`
+    TypeId int `json:"typeId"`
+}
+
+type Type struct {
+    Id         int    `json:"id"`
+    Name    Name `json:"name"`
+    Weaknessess []TypeRelation `json:"weaknesses"`
+    Resistances []TypeRelation `json:"resistances"`
+    Immunities  []TypeRelation `json:"immunities"`
+}
+
 type Base struct {
     HP        int `json:"HP"`
     Attack    int `json:"Attack"`
@@ -19,6 +32,7 @@ type Base struct {
 type Pokemon struct {
     Id   int    `json:"id"`
     Name Name   `json:"name"`
-    Type []string `json:"type"`
+    Type []Type `json:"type"`
     Base Base   `json:"base"`
 }
+
