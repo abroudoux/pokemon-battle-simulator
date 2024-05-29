@@ -13,10 +13,12 @@ func CheckString(c *gin.Context) {
 
 	if isDigit(s) {
 		sTransformed, err := strconv.Atoi(s)
+
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Conversion error"})
 			return
 		}
+
 		c.JSON(http.StatusOK, gin.H{"int": sTransformed})
 		return
 	}

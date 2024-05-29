@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/abroudoux/pokemon-battle-simulator/src/controllers"
+	"github.com/abroudoux/pokemon-battle-simulator/internal/controllers"
 	"github.com/gin-gonic/gin"
 )
 

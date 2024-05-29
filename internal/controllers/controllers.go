@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/abroudoux/pokemon-battle-simulator/src/models"
+	"github.com/abroudoux/pokemon-battle-simulator/internal/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,7 +14,7 @@ const INVALID_ID string = "Invalid ID"
 var Pokedex []models.Pokemon
 
 func InitPokedex() {
-    file, err := os.Open("data/pokedex.json")
+    file, err := os.Open("internal/data/pokedex.json")
 
     if err != nil {
         fmt.Println(err, "Error opening file")
@@ -43,8 +43,35 @@ func GetPokedex(c *gin.Context) {
 }
 
 func FindPokemonById(id int) models.Pokemon {
+	if id > len(Pokedex) || id < 1 {
+		fmt.Println("Pokemon not found")
+		return models.Pokemon{}
+	}
+
 	for _, pokemon := range Pokedex {
 		if pokemon.Id == id {
+			return pokemon
+		}
+	}
+
+	return models.Pokemon{}
+}
+
+func FindPokemonByName(name string) models.Pokemon {
+	for _, pokemon := range Pokedex {
+		if pokemon.Name.French == name {
+			return pokemon
+		}
+		
+		if pokemon.Name.English == name {
+			return pokemon
+		}
+
+		if pokemon.Name.Japanese == name {
+			return pokemon
+		}
+
+		if pokemon.Name.Chinese == name {
 			return pokemon
 		}
 	}
@@ -96,6 +123,5 @@ func CreateBattle(c *gin.Context) {
 
 	winner := FindHighestSpeed(pokemon1, pokemon2)
 
-	// c.JSON(200, gin.H{"pokemon battle": []models.Pokemon{pokemon1, pokemon2}})
-	c.JSON(200, gin.H{"winner": winner})
+	c.JSON(200, gin.H{"pokemon battle": []models.Pokemon{pokemon1, pokemon2}, "winner": winner})
 }

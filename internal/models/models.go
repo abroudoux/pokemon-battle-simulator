@@ -12,7 +12,7 @@ type TypeRelation struct {
     TypeId int `json:"typeId"`
 }
 
-type Type struct {
+type TypeData struct {
     Id         int    `json:"id"`
     Name    Name `json:"name"`
     Weaknessess []TypeRelation `json:"weaknesses"`
@@ -32,6 +32,6 @@ type Base struct {
 type Pokemon struct {
     Id   int    `json:"id"`
     Name Name   `json:"name"`
-    Type []Type `json:"type"`
+    Type []string `json:"type"`
     Base Base   `json:"base"`
 }
