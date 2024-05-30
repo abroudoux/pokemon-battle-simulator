@@ -152,39 +152,3 @@ func CreateBattle(c *gin.Context) {
 
 	c.JSON(200, gin.H{"pokemon battle": []models.Pokemon{pokemon1, pokemon2}, "winner": winner})
 }
-
-// func Test(c *gin.Context) {
-// 	s := c.Param("s")
-
-// 	sType := utils.CheckString(s)
-
-// 	if sType == "mixed" {
-// 		c.JSON(400, gin.H{"test": "mixed"})
-// 		return
-// 	}
-
-// 	if sType == "digit" {
-// 		sInt, err := strconv.Atoi(s)
-
-// 		if err != nil {
-// 			c.JSON(400, gin.H{"error": INVALID_ID})
-// 			return
-// 		}
-
-// 		pokemon := FindPokemonById(sInt)
-
-// 		if pokemon.Id != 0 {
-// 			c.JSON(200, gin.H{"pokemon": pokemon})
-// 			return
-// 		}
-
-// 		c.JSON(200, gin.H{"pokemon": pokemon})
-// 		return
-// 	}
-
-// 	if sType == "letter" {
-// 		pokemon := FindPokemonByName(s)
-// 		c.JSON(200, gin.H{"pokemon": pokemon})
-// 		return 
-// 	}
-// }
