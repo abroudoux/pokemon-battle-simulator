@@ -17,9 +17,11 @@ func Router() {
     })
 
     router.GET("/pokedex", controllers.GetPokedex)
-    router.GET("/pokedex/:id", controllers.GetPokemon)
+    router.GET("/pokedex/:pokemon", controllers.GetPokemon)
 
 	router.GET("/battle/:pokemon1/:pokemon2", controllers.CreateBattle)
+
+    // router.GET("/test/:s", controllers.Test)
 
     router.Run(":8080")
 }

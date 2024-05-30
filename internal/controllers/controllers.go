@@ -2,19 +2,23 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"net/http"
 	"os"
 	"strconv"
 
 	"github.com/abroudoux/pokemon-battle-simulator/internal/models"
+	"github.com/abroudoux/pokemon-battle-simulator/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
-const INVALID_ID string = "Invalid ID"
 var Pokedex []models.Pokemon
+const INVALID_ID string = "Invalid ID"
+const POKEMON_NOT_FOUND string = "Pokemon not found"
 
 func InitPokedex() {
-    file, err := os.Open("internal/data/pokedex.json")
+    file, err := os.Open("../../internal/data/pokedex.json")
 
     if err != nil {
         fmt.Println(err, "Error opening file")
@@ -42,54 +46,66 @@ func GetPokedex(c *gin.Context) {
     c.JSON(200, gin.H{"data": Pokedex})
 }
 
-func FindPokemonById(id int) models.Pokemon {
+func FindPokemonById(id int) (models.Pokemon, error) {
 	if id > len(Pokedex) || id < 1 {
-		fmt.Println("Pokemon not found")
-		return models.Pokemon{}
+		return models.Pokemon{}, errors.New(POKEMON_NOT_FOUND)
 	}
 
 	for _, pokemon := range Pokedex {
 		if pokemon.Id == id {
-			return pokemon
+			return pokemon, nil
 		}
 	}
 
-	return models.Pokemon{}
+	return models.Pokemon{}, errors.New(POKEMON_NOT_FOUND)
 }
 
-func FindPokemonByName(name string) models.Pokemon {
+func FindPokemonByName(name string) (models.Pokemon, error) {
 	for _, pokemon := range Pokedex {
-		if pokemon.Name.French == name {
-			return pokemon
-		}
-		
-		if pokemon.Name.English == name {
-			return pokemon
-		}
-
-		if pokemon.Name.Japanese == name {
-			return pokemon
-		}
-
-		if pokemon.Name.Chinese == name {
-			return pokemon
+		if pokemon.Name.French == name ||
+			pokemon.Name.English == name ||
+			pokemon.Name.Japanese == name ||
+			pokemon.Name.Chinese == name {
+			return pokemon, nil
 		}
 	}
-
-	return models.Pokemon{}
+	return models.Pokemon{}, errors.New(POKEMON_NOT_FOUND)
 }
 
 func GetPokemon(c *gin.Context) {
-    id, err := strconv.Atoi(c.Param("id"))
+	param := c.Param("pokemon")
 
-    if err != nil {
-        c.JSON(400, gin.H{"error": INVALID_ID})
-        return
-    }
+	paramType := utils.CheckString(param)
 
-    pokemon := FindPokemonById(id)
+	if paramType == "mixed" {
+		c.JSON(400, gin.H{"error": "Invalid parameter: mixed characters"})
+		return
+	}
 
-	if pokemon.Id != 0 {
+	if paramType == "digit" {
+		paramInt, err := strconv.Atoi(param)
+		if err != nil {
+			c.JSON(400, gin.H{"error": INVALID_ID})
+			return
+		}
+
+		pokemon, err := FindPokemonById(paramInt)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(200, gin.H{"pokemon": pokemon})
+		return
+	}
+
+	if paramType == "letter" {
+		pokemon, err := FindPokemonByName(param)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+
 		c.JSON(200, gin.H{"pokemon": pokemon})
 		return
 	}
@@ -118,10 +134,57 @@ func CreateBattle(c *gin.Context) {
 		return
 	}
 
-	pokemon1 := FindPokemonById(id1)
-	pokemon2 := FindPokemonById(id2)
+	pokemon1, err := FindPokemonById(id1)
+
+	if err != nil {
+		c.JSON(404, gin.H{"error": err.Error()})
+		return
+	}
+
+	pokemon2, err := FindPokemonById(id2)
+
+	if err != nil {
+		c.JSON(404, gin.H{"error": err.Error()})
+		return
+	}
 
 	winner := FindHighestSpeed(pokemon1, pokemon2)
 
 	c.JSON(200, gin.H{"pokemon battle": []models.Pokemon{pokemon1, pokemon2}, "winner": winner})
 }
+
+// func Test(c *gin.Context) {
+// 	s := c.Param("s")
+
+// 	sType := utils.CheckString(s)
+
+// 	if sType == "mixed" {
+// 		c.JSON(400, gin.H{"test": "mixed"})
+// 		return
+// 	}
+
+// 	if sType == "digit" {
+// 		sInt, err := strconv.Atoi(s)
+
+// 		if err != nil {
+// 			c.JSON(400, gin.H{"error": INVALID_ID})
+// 			return
+// 		}
+
+// 		pokemon := FindPokemonById(sInt)
+
+// 		if pokemon.Id != 0 {
+// 			c.JSON(200, gin.H{"pokemon": pokemon})
+// 			return
+// 		}
+
+// 		c.JSON(200, gin.H{"pokemon": pokemon})
+// 		return
+// 	}
+
+// 	if sType == "letter" {
+// 		pokemon := FindPokemonByName(s)
+// 		c.JSON(200, gin.H{"pokemon": pokemon})
+// 		return 
+// 	}
+// }
