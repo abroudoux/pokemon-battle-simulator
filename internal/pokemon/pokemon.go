@@ -27,7 +27,6 @@ func InitPokedex() {
     }
 
     defer file.Close()
-
     err = json.NewDecoder(file).Decode(&Pokedex)
 
     if err != nil {
@@ -38,13 +37,12 @@ func InitPokedex() {
     fmt.Println("Pokedex initialized with", len(Pokedex), "pokemons")
 }
 
-func GetPokedex(c *gin.Context) {
-    if len(Pokedex) == 0 {
-        c.JSON(404, gin.H{"error": "No Pokemon in Pokedex"})
-        return
-    }
+func FindHighestSpeed(pokemon1 types.Pokemon, pokemon2 types.Pokemon) types.Pokemon {
+	if pokemon1.Base.Speed > pokemon2.Base.Speed {
+		return pokemon1
+	}
 
-    c.JSON(200, gin.H{"data": Pokedex})
+	return pokemon2
 }
 
 func FindPokemonById(id int) (types.Pokemon, error) {
@@ -55,7 +53,6 @@ func FindPokemonById(id int) (types.Pokemon, error) {
 	for _, pokemon := range Pokedex {
 		if pokemon.Id == id {
 			return pokemon, nil
-	
 		}
 	}
 
@@ -68,7 +65,7 @@ func FindPokemonByName(name string) (types.Pokemon, error) {
 			pokemon.Name.English == name ||
 			pokemon.Name.Japanese == name ||
 			pokemon.Name.Chinese == name {
-		
+
 			return pokemon, nil
 		}
 	}
@@ -84,19 +81,30 @@ func FindPokemon(param string) (types.Pokemon, error) {
 
 	if paramType == "digit" {
 		id, err := strconv.Atoi(param)
+
 		if err != nil {
 			return types.Pokemon{}, errors.New("Invalid ID")
 		}
+
 		return FindPokemonById(id)
 	}
 
 	if paramType == "letter" {
 		param = utils.CapitalizeFirstLetter(param)
-		
+
 		return FindPokemonByName(param)
 	}
 
 	return types.Pokemon{}, errors.New("Invalid parameter type")
+}
+
+func GetPokedex(c *gin.Context) {
+    if len(Pokedex) == 0 {
+        c.JSON(404, gin.H{"error": "No Pokemon in Pokedex"})
+        return
+    }
+
+    c.JSON(200, gin.H{"data": Pokedex})
 }
 
 func GetPokemon(c *gin.Context) {
@@ -109,14 +117,6 @@ func GetPokemon(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"pokemon": pokemon})
-}
-
-func FindHighestSpeed(pokemon1 types.Pokemon, pokemon2 types.Pokemon) types.Pokemon {
-	if pokemon1.Base.Speed > pokemon2.Base.Speed {
-		return pokemon1
-	}
-
-	return pokemon2
 }
 
 func CreateBattle(c *gin.Context) {
