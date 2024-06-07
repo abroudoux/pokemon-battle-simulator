@@ -1,10 +1,11 @@
 package utils
 
 import (
+	"strings"
 	"unicode"
 )
 
-func CheckString(s string) string {
+func CheckParamType(s string) string {
 	hasDigit := false
 	hasLetter := false
 
@@ -44,4 +45,11 @@ func isLetter(s string) bool {
 		}
 	}
 	return true
+}
+
+func CapitalizeFirstLetter(s string) string {
+	if len(s) == 0 {
+		return ""
+	}
+	return strings.ToUpper(string(s[0])) + strings.ToLower(s[1:])
 }

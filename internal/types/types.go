@@ -1,4 +1,4 @@
-package models
+package types
 
 type Name struct {
     English  string `json:"english"`

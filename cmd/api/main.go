@@ -1,11 +1,11 @@
 package main
 
 import (
-	controllers "github.com/abroudoux/pokemon-battle-simulator/internal/controllers"
+	pokemon "github.com/abroudoux/pokemon-battle-simulator/internal/pokemon"
 	router "github.com/abroudoux/pokemon-battle-simulator/internal/routes"
 )
 
 func main () {
-	controllers.InitPokedex()
+	pokemon.InitPokedex()
 	router.Router()
 }
