@@ -30,14 +30,14 @@ func InitPokedex() {
     err = json.NewDecoder(file).Decode(&Pokedex)
 
     if err != nil {
-        fmt.Println(err, "Error decoding JSON")
+        fmt.Println(err, "Error decoding file")
         return
     }
 
     fmt.Println("Pokedex initialized with", len(Pokedex), "pokemons")
 }
 
-func FindHighestSpeed(pokemon1 types.Pokemon, pokemon2 types.Pokemon) types.Pokemon {
+func findHighestSpeed(pokemon1 types.Pokemon, pokemon2 types.Pokemon) types.Pokemon {
 	if pokemon1.Base.Speed > pokemon2.Base.Speed {
 		return pokemon1
 	}
@@ -45,7 +45,7 @@ func FindHighestSpeed(pokemon1 types.Pokemon, pokemon2 types.Pokemon) types.Poke
 	return pokemon2
 }
 
-func FindPokemonById(id int) (types.Pokemon, error) {
+func findPokemonById(id int) (types.Pokemon, error) {
 	if id > len(Pokedex) || id < 1 {
 		return types.Pokemon{}, errors.New(INVALID_ID)
 	}
@@ -59,7 +59,7 @@ func FindPokemonById(id int) (types.Pokemon, error) {
 	return types.Pokemon{}, errors.New(POKEMON_NOT_FOUND)
 }
 
-func FindPokemonByName(name string) (types.Pokemon, error) {
+func findPokemonByName(name string) (types.Pokemon, error) {
 	for _, pokemon := range Pokedex {
 		if pokemon.Name.French == name ||
 			pokemon.Name.English == name ||
@@ -72,7 +72,7 @@ func FindPokemonByName(name string) (types.Pokemon, error) {
 	return types.Pokemon{}, errors.New(POKEMON_NOT_FOUND)
 }
 
-func FindPokemon(param string) (types.Pokemon, error) {
+func findPokemon(param string) (types.Pokemon, error) {
 	paramType := utils.CheckParamType(param)
 
 	if paramType == "mixed" {
@@ -86,13 +86,13 @@ func FindPokemon(param string) (types.Pokemon, error) {
 			return types.Pokemon{}, errors.New("Invalid ID")
 		}
 
-		return FindPokemonById(id)
+		return findPokemonById(id)
 	}
 
 	if paramType == "letter" {
 		param = utils.CapitalizeFirstLetter(param)
 
-		return FindPokemonByName(param)
+		return findPokemonByName(param)
 	}
 
 	return types.Pokemon{}, errors.New("Invalid parameter type")
@@ -104,13 +104,18 @@ func GetPokedex(c *gin.Context) {
         return
     }
 
-    c.JSON(200, gin.H{"data": Pokedex})
+	if Pokedex == nil {
+		c.JSON(404, gin.H{"error": "Pokedex not initialized"})
+		return
+	}
+
+    c.JSON(200, gin.H{"Pokedex": Pokedex})
 }
 
 func GetPokemon(c *gin.Context) {
 	param := c.Param("pokemon")
+	pokemon, err := findPokemon(param)
 
-	pokemon, err := FindPokemon(param)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -119,25 +124,26 @@ func GetPokemon(c *gin.Context) {
 	c.JSON(200, gin.H{"pokemon": pokemon})
 }
 
+// TODO: Fix bug => can't create battle with a name as parameter (finPokemonByName not working properly)
 func CreateBattle(c *gin.Context) {
 	param1 := c.Param("pokemon1")
 	param2 := c.Param("pokemon2")
 
-	pokemon1, err := FindPokemon(param1)
+	pokemon1, err := findPokemon(param1)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
-	pokemon2, err := FindPokemon(param2)
+	pokemon2, err := findPokemon(param2)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
-	winner := FindHighestSpeed(pokemon1, pokemon2)
+	winner := findHighestSpeed(pokemon1, pokemon2)
 
 	c.JSON(200, gin.H{"winner": winner, "pokemon1": pokemon1, "pokemon2": pokemon2})
 }

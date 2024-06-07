@@ -7,5 +7,5 @@ import (
 
 func main () {
 	pokemon.InitPokedex()
-	router.Router()
+	router.InitRouter()
 }
