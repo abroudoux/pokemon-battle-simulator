@@ -45,6 +45,77 @@ func findHighestSpeed(pokemon1 types.Pokemon, pokemon2 types.Pokemon) types.Poke
 	return pokemon2
 }
 
+func findWinner(pokemon1 types.Pokemon, pokemon2 types.Pokemon) (float64) {
+	attacker := findHighestSpeed(pokemon1, pokemon2)
+
+	var defender types.Pokemon
+
+	if attacker.Id == pokemon1.Id {
+		defender = pokemon2
+	} else {
+		defender = pokemon1
+	}
+
+	multiplier := calculteMultiplier(attacker, defender)
+
+	return multiplier
+}
+
+func calculteMultiplier(attacker types.Pokemon, defender types.Pokemon) float64 {
+	multiplier := 1.0
+
+	for _, attackerType := range attacker.Type {
+		multiplier *= calculateWeaknessesMultiplier(attackerType, defender.Type)
+		multiplier *= calculateResistancesMultiplier(attackerType, defender.Type)
+		multiplier *= calculateImmunitiesMultiplier(attackerType, defender.Type)
+	}
+
+	return multiplier
+}
+
+func calculateWeaknessesMultiplier(attackerType types.TypeData, defenderTypes []types.TypeData) float64 {
+	multiplier := 1.0
+
+	for _, defenderType := range defenderTypes {
+		for _, weakness := range attackerType.Weaknessess {
+			if weakness.TypeId == defenderType.Id {
+				multiplier *= 2
+			}
+		}
+	}
+
+	return multiplier
+}
+
+func calculateResistancesMultiplier(attackerType types.TypeData, defenderTypes []types.TypeData) float64 {
+	multiplier := 1.0
+
+	for _, defenderType := range defenderTypes {
+		for _, resistance := range attackerType.Resistances {
+			if resistance.TypeId == defenderType.Id {
+				multiplier *= 0.5
+			}
+		}
+	}
+
+	return multiplier
+}
+
+func calculateImmunitiesMultiplier(attackerType types.TypeData, defenderTypes []types.TypeData) float64 {
+	multiplier := 1.0
+
+	for _, defenderType := range defenderTypes {
+		for _, immunity := range attackerType.Immunities {
+			if immunity.TypeId == defenderType.Id {
+				multiplier *= 0
+			}
+		}
+	}
+
+	return multiplier
+}
+
+
 func findPokemonById(id int) (types.Pokemon, error) {
 	if id > len(Pokedex) || id < 1 {
 		return types.Pokemon{}, errors.New(INVALID_ID)
@@ -124,7 +195,6 @@ func GetPokemon(c *gin.Context) {
 	c.JSON(200, gin.H{"pokemon": pokemon})
 }
 
-// TODO: Fix bug => can't create battle with a name as parameter (finPokemonByName not working properly)
 func CreateBattle(c *gin.Context) {
 	param1 := c.Param("pokemon1")
 	param2 := c.Param("pokemon2")
@@ -143,7 +213,8 @@ func CreateBattle(c *gin.Context) {
 		return
 	}
 
-	winner := findHighestSpeed(pokemon1, pokemon2)
+	fastest := findHighestSpeed(pokemon1, pokemon2)
+	mutiplier := findWinner(pokemon1, pokemon2)
 
-	c.JSON(200, gin.H{"winner": winner, "pokemon1": pokemon1, "pokemon2": pokemon2})
+	c.JSON(200, gin.H{"fastest": fastest, "pokemon1": pokemon1, "pokemon2": pokemon2, "multiplier": mutiplier},)
 }

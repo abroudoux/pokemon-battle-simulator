@@ -32,6 +32,6 @@ type Base struct {
 type Pokemon struct {
     Id   int    `json:"id"`
     Name Name   `json:"name"`
-    Type []string `json:"type"`
+    Type []TypeData `json:"type"`
     Base Base   `json:"base"`
 }
