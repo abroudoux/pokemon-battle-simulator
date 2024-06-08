@@ -45,7 +45,7 @@ func findHighestSpeed(pokemon1 types.Pokemon, pokemon2 types.Pokemon) types.Poke
 	return pokemon2
 }
 
-func findWinner(pokemon1 types.Pokemon, pokemon2 types.Pokemon) (float64) {
+func findWinner(pokemon1 types.Pokemon, pokemon2 types.Pokemon) (types.Pokemon) {
 	attacker := findHighestSpeed(pokemon1, pokemon2)
 
 	var defender types.Pokemon
@@ -57,8 +57,23 @@ func findWinner(pokemon1 types.Pokemon, pokemon2 types.Pokemon) (float64) {
 	}
 
 	multiplier := calculteMultiplier(attacker, defender)
+	highestStatAttacker := findHighestStatAttacker(attacker)
 
-	return multiplier
+	if highestStatAttacker == "Attack" {
+		if float64(attacker.Base.Attack) * multiplier > float64(defender.Base.HP) {
+			return attacker
+		}
+
+		return defender
+	} else if highestStatAttacker == "SpAttack" {
+		if float64(attacker.Base.SpAttack) * multiplier > float64(defender.Base.HP) {
+			return attacker
+		}
+
+		return defender
+	}
+
+	return types.Pokemon{}
 }
 
 func calculteMultiplier(attacker types.Pokemon, defender types.Pokemon) float64 {
@@ -115,6 +130,13 @@ func calculateImmunitiesMultiplier(attackerType types.TypeData, defenderTypes []
 	return multiplier
 }
 
+func findHighestStatAttacker(attacker types.Pokemon) (highestStat string) {
+	if attacker.Base.Attack > attacker.Base.SpAttack {
+		return "Attack"
+	}
+
+	return "SpAttack"
+}
 
 func findPokemonById(id int) (types.Pokemon, error) {
 	if id > len(Pokedex) || id < 1 {
@@ -214,7 +236,7 @@ func CreateBattle(c *gin.Context) {
 	}
 
 	fastest := findHighestSpeed(pokemon1, pokemon2)
-	mutiplier := findWinner(pokemon1, pokemon2)
+	winner := findWinner(pokemon1, pokemon2)
 
-	c.JSON(200, gin.H{"fastest": fastest, "pokemon1": pokemon1, "pokemon2": pokemon2, "multiplier": mutiplier},)
+	c.JSON(200, gin.H{"fastest": fastest, "winner": winner},)
 }

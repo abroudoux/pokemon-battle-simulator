@@ -13,5 +13,5 @@ func InitRouter() {
 
 	router.GET("/battle/:pokemon1/:pokemon2", pokemon.CreateBattle)
 
-    router.Run(":8080")
+    router.Run(":151")
 }
