@@ -31,11 +31,7 @@ func findPokemonById(id int) (types.Pokemon, error) {
 
 func findPokemonByName(name string) (types.Pokemon, error) {
 	for _, pokemon := range Pokedex {
-		if pokemon.Name.French == name ||
-			pokemon.Name.English == name ||
-			pokemon.Name.Japanese == name ||
-			pokemon.Name.Chinese == name {
-
+		if pokemon.Name.French == name || pokemon.Name.English == name || pokemon.Name.Japanese == name || pokemon.Name.Chinese == name {
 			return pokemon, nil
 		}
 	}
@@ -69,37 +65,36 @@ func findPokemon(param string) (types.Pokemon, error) {
 }
 
 func InitPokedex() {
-    file, err := os.Open(FILE_PATH)
+	file, err := os.Open(FILE_PATH)
 
-    if err != nil {
-        fmt.Println(err, "Error opening file")
-        return
-    }
+	if err != nil {
+		fmt.Println(err, "Error opening file")
+		return
+	}
 
-    defer file.Close()
-    err = json.NewDecoder(file).Decode(&Pokedex)
+	defer file.Close()
+	err = json.NewDecoder(file).Decode(&Pokedex)
 
-    if err != nil {
-        fmt.Println(err, "Error decoding file")
-        return
-    }
+	if err != nil {
+		fmt.Println(err, "Error decoding file")
+		return
+	}
 
-    fmt.Println("Pokedex initialized with", len(Pokedex), "pokemons")
+	fmt.Println("Pokedex initialized with", len(Pokedex), "pokemons")
 }
 
-
 func GetPokedex(c *gin.Context) {
-    if len(Pokedex) == 0 {
-        c.JSON(404, gin.H{"error": "No Pokemon in Pokedex"})
-        return
-    }
+	if len(Pokedex) == 0 {
+		c.JSON(404, gin.H{"error": "No Pokemon in Pokedex"})
+		return
+	}
 
 	if Pokedex == nil {
 		c.JSON(404, gin.H{"error": "Pokedex not initialized"})
 		return
 	}
 
-    c.JSON(200, gin.H{"Pokedex": Pokedex})
+	c.JSON(200, gin.H{"Pokedex": Pokedex})
 }
 
 func GetPokemon(c *gin.Context) {
